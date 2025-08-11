@@ -1,0 +1,39 @@
+:root {
+  --cf-bg: hsl(0 0% 100%);
+  --cf-fg: hsl(222 47% 11%);
+  --cf-muted: hsl(215 16% 47%);
+  --cf-border: hsl(214 32% 91%);
+  --cf-surface: hsl(0 0% 100%);
+  --cf-brand-start: hsl(258 91% 64%);
+  --cf-brand-end: hsl(198 95% 55%);
+  --cf-radius: 12px;
+  --cf-shadow: 0 20px 60px hsl(220 40% 2% / 0.2);
+}
+
+.cf-overlay { position: fixed; inset: 0; z-index: 2147483647; display: none; }
+.cf-overlay[data-open="true"] { display: block; }
+.cf-backdrop { position: absolute; inset: 0; background: hsl(220 10% 10% / 0.4); backdrop-filter: blur(2px); }
+.cf-modal { position: relative; margin: 6vh auto; max-width: 720px; background: var(--cf-surface); color: var(--cf-fg); border: 1px solid var(--cf-border); border-radius: var(--cf-radius); box-shadow: var(--cf-shadow); overflow: hidden; }
+.cf-header { padding: 16px 20px; border-bottom: 1px solid var(--cf-border); display: flex; align-items: center; justify-content: space-between; }
+.cf-title { font: 600 16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+.cf-close { appearance: none; background: transparent; border: 0; cursor: pointer; padding: 6px; border-radius: 8px; }
+.cf-close:hover { background: hsl(220 14% 96%); }
+.cf-body { display: grid; gap: 16px; padding: 16px 20px; grid-template-columns: 1fr; }
+.cf-preview { display: flex; gap: 12px; align-items: flex-start; }
+.cf-shot { width: 100%; max-height: 220px; object-fit: contain; border-radius: 10px; border: 1px solid var(--cf-border); box-shadow: 0 10px 24px hsl(220 40% 2% / 0.15); }
+.cf-meta { font-size: 12px; color: var(--cf-muted); }
+.cf-fields { display: grid; gap: 12px; }
+.cf-field label { display: block; font: 600 12px/1.2 system-ui, -apple-system, Segoe UI, Roboto; margin-bottom: 6px; color: var(--cf-fg); }
+.cf-input, .cf-select, .cf-textarea { width: 100%; box-sizing: border-box; border: 1px solid var(--cf-border); border-radius: 10px; padding: 10px 12px; background: var(--cf-bg); color: var(--cf-fg); font: 500 13px/1.4 system-ui, -apple-system, Segoe UI, Roboto; outline: none; }
+.cf-textarea { min-height: 84px; resize: vertical; }
+.cf-row { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }
+.cf-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 20px 16px; border-top: 1px solid var(--cf-border); }
+.cf-btn { appearance: none; border: 0; border-radius: 10px; padding: 10px 14px; font: 600 13px/1.2 system-ui, -apple-system, Segoe UI, Roboto; cursor: pointer; }
+.cf-btn.primary { color: white; background: linear-gradient(135deg, var(--cf-brand-start), var(--cf-brand-end)); box-shadow: 0 10px 24px hsl(200 80% 40% / 0.35); }
+.cf-btn.primary:hover { filter: brightness(1.05) saturate(1.05); }
+.cf-btn.ghost { background: transparent; color: var(--cf-fg); }
+
+@media (max-width: 640px) {
+  .cf-modal { margin: 2vh; }
+  .cf-row { grid-template-columns: 1fr; }
+}
