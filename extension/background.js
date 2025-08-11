@@ -2,6 +2,8 @@
 const MENU_ID = 'clickfeedback-give-feedback';
 
 chrome.runtime.onInstalled.addListener(() => {
+  console.log('ClickFeedback extension installed');
+  
   try {
     chrome.contextMenus.create({
       id: MENU_ID,
@@ -9,6 +11,7 @@ chrome.runtime.onInstalled.addListener(() => {
       contexts: ['all'],
       documentUrlPatterns: ['http://*/*', 'https://*/*']
     });
+    console.log('Context menu created successfully');
   } catch (e) {
     console.error('Context menu creation failed', e);
   }
@@ -27,11 +30,26 @@ function captureVisible(windowId) {
 }
 
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
-  if (info.menuItemId !== MENU_ID || !tab || tab.id == null) return;
+  console.log('Context menu clicked', info, tab);
+  
+  if (info.menuItemId !== MENU_ID || !tab || tab.id == null) {
+    console.log('Menu item not ours or no tab');
+    return;
+  }
+  
   try {
     const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    console.log('Active tab:', activeTab);
+    
     const screenshot = await captureVisible(activeTab.windowId);
-    await chrome.tabs.sendMessage(tab.id, { type: 'CF_OPEN_MODAL', screenshot });
+    console.log('Screenshot captured');
+    
+    await chrome.tabs.sendMessage(tab.id, { 
+      type: 'CF_OPEN_MODAL', 
+      screenshot: screenshot 
+    });
+    console.log('Message sent to content script');
+    
   } catch (e) {
     console.error('Error opening ClickFeedback modal:', e);
   }
