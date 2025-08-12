@@ -124,7 +124,13 @@
     overlay.dataset.open = 'true';
     const backdrop = el('div', { className: 'cf-backdrop' });
 
-    const close = () => { overlay.remove(); };
+    let resizeObserver;
+    const close = () => { 
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
+      overlay.remove(); 
+    };
 
     const title = el('div', { className: 'cf-title', textContent: 'Give Feedback' });
     const btnClose = el('button', { className: 'cf-close', title: 'Close', innerHTML: '✕' });
@@ -193,6 +199,37 @@
     const modal = el('div', { className: 'cf-modal' }, [header, body, footer]);
     overlay.append(backdrop, modal);
     document.documentElement.appendChild(overlay);
+
+    // Dynamic positioning and responsive behavior
+    const adjustModalPosition = () => {
+      const viewportHeight = window.innerHeight;
+      const viewportWidth = window.innerWidth;
+      const modalRect = modal.getBoundingClientRect();
+      
+      // Ensure modal doesn't exceed viewport height
+      if (modalRect.height > viewportHeight - 40) {
+        modal.style.maxHeight = `${viewportHeight - 40}px`;
+      }
+      
+      // Ensure modal is centered and visible
+      if (viewportWidth < 768) {
+        overlay.style.padding = '10px';
+      } else {
+        overlay.style.padding = '20px';
+      }
+    };
+
+    // Initial adjustment
+    adjustModalPosition();
+    
+    // Adjust on window resize
+    resizeObserver = new ResizeObserver(adjustModalPosition);
+    resizeObserver.observe(modal);
+    
+    // Adjust on orientation change
+    window.addEventListener('orientationchange', () => {
+      setTimeout(adjustModalPosition, 100);
+    });
 
     const onKey = (ev) => { if (ev.key === 'Escape') close(); };
     document.addEventListener('keydown', onKey, { once: true });
